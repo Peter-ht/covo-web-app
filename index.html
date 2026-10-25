@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Covo Navbar</title>
+    <link rel="stylesheet" href="style.css?v=20261025">
+    <script type="module" src="./src/app.js?v=20261025"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar" aria-label="Main navigation">
+        <div class="logo">Covo</div>
+
+        <div class="nav-links">
+          <a href="#home">Home</a>
+          <a href="#order">Order</a>
+          <a href="#menu">Menu</a>
+          <a href="#admin">Admin</a>
+          <a href="#contact">Contact</a>
+        </div>
+
+        <a href="#" class="cta" id="cart-link">Cart (0)</a>
+      </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <div class="hero">
+                <div class="hero-content">
+                    <p class="eyebrow">Fresh meals, fast delivery</p>
+                    <h1>Good food for every mood.</h1>
+                    <p>
+                        Discover tasty dishes, handcrafted with fresh ingredients and delivered
+                        right to your door.
+                    </p>
+
+                    <div class="hero-actions">
+                        <a href="#" class="primary-btn">Order now</a>
+                        <a href="#" class="secondary-btn">Explore menu</a>
+                    </div>
+
+                    <ul class="hero-features">
+                        <li>Free delivery over $20</li>
+                        <li>15 min average prep</li>
+                        <li>Fresh daily ingredients</li>
+                    </ul>
+                </div>
+
+                
+            </div>
+        </section>
+        <section id="order" class="order-section">
+            <div class="order-header">
+                <p class="eyebrow">Order & tracking</p>
+                <h2>Easy ordering, live tracking</h2>
+            </div>
+
+            <div class="order-layout">
+                <div class="order-steps">
+                    <div class="order-step">
+                        <span class="step-number">01</span>
+                        <div>
+                            <h3>Choose your meal</h3>
+                            <p>Select from our chef-crafted favorites and add items to your cart.</p>
+                        </div>
+                    </div>
+
+                    <div class="order-step">
+                        <span class="step-number">02</span>
+                        <div>
+                            <h3>Pay with M-Pesa</h3>
+                            <p>Complete your order through the secure M-Pesa payment prompt.</p>
+                        </div>
+                    </div>
+
+                    <div class="order-step">
+                        <span class="step-number">03</span>
+                        <div>
+                            <h3>Track delivery</h3>
+                            <p>Follow the order progress from kitchen prep to doorstep arrival.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tracking-card">
+                    <div class="tracking-header">
+                        <div>
+                            <p class="eyebrow small">Live tracking</p>
+                            <h3>Order #COVO-2048</h3>
+                        </div>
+                        <span class="tracking-status">On the way</span>
+                    </div>
+
+                    <div class="tracking-progress">
+                        <div class="progress-line">
+                            <span class="active"></span>
+                        </div>
+                        <div class="progress-steps">
+                            <span class="done">Pending</span>
+                            <span class="done">Preparing</span>
+                            <span class="done">Ready</span>
+                            <span>Completed</span>
+                        </div>
+                    </div>
+
+                    <div class="tracking-meta">
+                        <div>
+                            <strong>Driver</strong>
+                            <span>Kevin</span>
+                        </div>
+                        <div>
+                            <strong>ETA</strong>
+                            <span>12 mins</span>
+                        </div>
+                        <div>
+                            <strong>Delivery</strong>
+                            <span>Hurlingham</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="menu" class="menu-section">
+            <div class="menu-header">
+                <p class="eyebrow">Popular picks</p>
+                <h2>Chef-crafted favorites</h2>
+            </div>
+
+            <div class="marquee-wrap" aria-label="Scrolling menu highlights">
+                <div class="marquee-track">
+                    <span>Fresh bowls</span>
+                    <span>Grilled wraps</span>
+                    <span>Signature sushi</span>
+                    <span>Sweet treats</span>
+                    <span>Healthy combos</span>
+                    <span>Fresh bowls</span>
+                    <span>Grilled wraps</span>
+                    <span>Signature sushi</span>
+                    <span>Sweet treats</span>
+                    <span>Healthy combos</span>
+                </div>
+            </div>
+
+            <div id="menu-grid" class="menu-grid" aria-live="polite"></div>
+
+            <aside class="cart-panel" aria-live="polite">
+              <div class="cart-header">
+                <span>Your cart</span>
+                <span id="cart-indicator" class="cart-badge">0 items</span>
+              </div>
+              <ul id="cart-items" class="cart-items">
+                <li class="empty">Your cart is empty.</li>
+              </ul>
+              <div class="cart-total-row">
+                <span>Total</span>
+                <strong id="cart-total">KSh 0</strong>
+              </div>
+              <button type="button" class="checkout-btn">Checkout</button>
+            </aside>
+        </section>
+
+        <section id="admin" class="admin-section">
+            <div class="admin-header">
+                <p class="eyebrow">Admin</p>
+                <h2>Manage menu</h2>
+            </div>
+
+            <form id="admin-login-form" class="admin-login-form">
+                <h3>Admin login</h3>
+                <label>
+                    <span>Username</span>
+                    <input type="text" id="admin-username" placeholder="admin" required />
+                </label>
+                <label>
+                    <span>Password</span>
+                    <input type="password" id="admin-password" placeholder="••••••••" required />
+                </label>
+                <button type="submit" class="primary-admin-btn">Login</button>
+                <p id="admin-login-message" class="admin-login-message"></p>
+            </form>
+
+            <div id="admin-panel" class="admin-panel hidden">
+                <div class="admin-panel-header">
+                    <h3>Menu editor</h3>
+                    <button type="button" id="logout-admin" class="secondary-admin-btn">Logout</button>
+                </div>
+
+                <form id="menu-form" class="admin-form">
+                    <input type="hidden" id="menu-id" />
+
+                    <div class="form-grid">
+                        <label>
+                            <span>Item name</span>
+                            <input type="text" id="menu-name" placeholder="e.g. Nyama Burger" required />
+                        </label>
+
+                        <label>
+                            <span>Tag</span>
+                            <input type="text" id="menu-tag" placeholder="e.g. Best seller" required />
+                        </label>
+
+                        <label>
+                            <span>Price</span>
+                            <input type="number" id="menu-price" min="1" step="1" placeholder="1500" required />
+                        </label>
+
+                        <label>
+                            <span>Image URL</span>
+                            <input type="url" id="menu-image" placeholder="https://example.com/image.jpg" required />
+                        </label>
+                    </div>
+
+                    <label class="full-width">
+                        <span>Description</span>
+                        <textarea id="menu-description" rows="3" placeholder="Describe the menu item" required></textarea>
+                    </label>
+
+                    <div class="form-actions">
+                        <button type="submit" class="primary-admin-btn">Save item</button>
+                        <button type="button" id="cancel-edit" class="secondary-admin-btn hidden">Cancel</button>
+                    </div>
+                </form>
+
+                <div class="admin-list-wrap">
+                    <h3>Current menu</h3>
+                    <ul id="admin-menu-list" class="admin-menu-list"></ul>
+                </div>
+
+                <div class="admin-list-wrap orders-wrap">
+                    <h3>Customer orders</h3>
+                    <ul id="admin-orders-list" class="admin-orders-list"></ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="contact-card">
+                <div class="contact-copy">
+                    <p class="eyebrow">Contact</p>
+                    <h2>Let’s bring the flavor to you.</h2>
+                    <p>
+                        Visit us for a fresh meal, a quick takeaway, or a cozy night out with family and friends.
+                    </p>
+                </div>
+
+                <div class="contact-details">
+                    <div>
+                        <strong>Location</strong>
+                        <span>Hurlingham, Nairobi</span>
+                    </div>
+                    <div>
+                        <strong>Phone</strong>
+                        <span>+254 769767764</span>
+                    </div>
+                    <div>
+                        <strong>Email</strong>
+                        <span>covokilimani@covo.co.ke</span>
+                    </div>
+                    <div>
+                        <strong>Hours</strong>
+                        <span>Mon-Sun: 10:00 AM - 11:00 PM</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="mpesa-modal" class="mpesa-modal hidden" aria-hidden="true">
+        <div class="mpesa-modal-content" role="dialog" aria-modal="true" aria-labelledby="mpesa-title">
+            <div class="mpesa-header">
+                <div>
+                    <p class="eyebrow">M-Pesa</p>
+                    <h3 id="mpesa-title">Pay with M-Pesa</h3>
+                </div>
+                <button type="button" id="close-mpesa-modal" class="close-modal-btn" aria-label="Close payment dialog">×</button>
+            </div>
+
+            <form id="mpesa-form" class="mpesa-form">
+                <label>
+                    <span>Phone Number</span>
+                    <input type="tel" id="mpesa-phone" placeholder="254712345678" required />
+                </label>
+
+                <div class="mpesa-summary">
+                    <span>Payable amount</span>
+                    <strong id="mpesa-total">KSh 0</strong>
+                </div>
+
+                <div class="mpesa-actions">
+                    <button type="button" id="cancel-mpesa-modal" class="secondary-admin-btn">Cancel</button>
+                    <button type="submit" class="primary-admin-btn">Send M-Pesa Prompt</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div>
+                <div class="logo footer-logo">Covo</div>
+                <p>Fresh food, warm vibes, and memorable meals.</p>
+            </div>
+
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#menu">Menu</a>
+                <a href="#admin">Admin</a>
+                <a href="#contact">Contact</a>
+            </div>
+
+            <div class="footer-copy">© 2026 Covo. All rights reserved.</div>
+        </div>
+    </footer>
+
+</body>
+</html>
