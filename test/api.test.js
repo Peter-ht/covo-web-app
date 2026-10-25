@@ -31,7 +31,7 @@ test('sanitizeMenuItems removes order records from the menu feed', () => {
       name: 'Truffle Mushroom Pasta',
       tag: 'Chef special',
       description: 'Creamy parmesan pasta.',
-      price: 1650,
+      price: 'KSh 1,650',
       image: 'https://example.com/pasta.jpg'
     },
     {
@@ -48,6 +48,7 @@ test('sanitizeMenuItems removes order records from the menu feed', () => {
 
   assert.equal(cleaned.length, 1);
   assert.equal(cleaned[0].name, 'Truffle Mushroom Pasta');
+  assert.equal(cleaned[0].price, 1650);
 });
 
 test('fetchMenuItems falls back to the bundled menu when the API is unavailable', async () => {

@@ -96,6 +96,20 @@ export async function apiRequest(endpoint, { method = 'GET', body, headers = {} 
   return text ? JSON.parse(text) : null;
 }
 
+function parsePrice(value) {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : NaN;
+  }
+
+  const text = String(value ?? '').trim();
+  if (!text) {
+    return NaN;
+  }
+
+  const normalized = text.replace(/[^\d.]/g, '');
+  return Number(normalized);
+}
+
 export function validateMenuItem(item) {
   if (!item || typeof item !== 'object') {
     throw new Error('Menu item must be an object.');
@@ -109,7 +123,7 @@ export function validateMenuItem(item) {
     image: String(item.image || '').trim()
   };
 
-  const numericPrice = Number(String(item.price || '').replace(/[^\d.]/g, ''));
+  const numericPrice = parsePrice(item.price);
 
   if (!sanitizedItem.name) {
     throw new Error('Item name is required.');
@@ -136,29 +150,35 @@ export function sanitizeMenuItems(items) {
     return [];
   }
 
-  return items.filter((item) => {
-    if (!item || typeof item !== 'object') {
-      return false;
-    }
+  return items
+    .filter((item) => {
+      if (!item || typeof item !== 'object') {
+        return false;
+      }
 
-    const name = String(item.name || '').trim();
-    const tag = String(item.tag || '').trim();
-    const description = String(item.description || '').trim();
+      const name = String(item.name || '').trim();
+      const tag = String(item.tag || '').trim();
+      const description = String(item.description || '').trim();
+      const price = parsePrice(item.price);
 
-    if (name.startsWith('Order-')) {
-      return false;
-    }
+      if (name.toLowerCase().startsWith('order-')) {
+        return false;
+      }
 
-    if (tag === 'M-Pesa') {
-      return false;
-    }
+      if (tag === 'M-Pesa') {
+        return false;
+      }
 
-    if (description.startsWith('{') && description.includes('"items"')) {
-      return false;
-    }
+      if (description.startsWith('{') && description.includes('"items"')) {
+        return false;
+      }
 
-    return Boolean(name && tag && description && Number(item.price) > 0);
-  });
+      return Boolean(name && tag && description && Number.isFinite(price) && price > 0);
+    })
+    .map((item) => ({
+      ...item,
+      price: parsePrice(item.price)
+    }));
 }
 
 export async function fetchMenuItems() {
