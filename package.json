@@ -1,0 +1,16 @@
+{
+  "name": "covo-web-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "json-server --watch db.json --port 3001",
+    "test": "node --test",
+    "coverage": "c8 node --test"
+  },
+  "devDependencies": {
+    "c8": "^10.1.2",
+    "json-server": "^0.17.4"
+  }
+}

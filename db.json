@@ -1,0 +1,68 @@
+{
+  "menu": [
+    {
+      "id": 1,
+      "name": "Crispy Chicken Bowl",
+      "tag": "High protein",
+      "price": 1490,
+      "description": "Tender grilled chicken, brown rice, roasted greens, and citrus drizzle.",
+      "image": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "id": 2,
+      "name": "Truffle Mushroom Pasta",
+      "tag": "Chef special",
+      "price": 1650,
+      "description": "Creamy parmesan pasta with roasted mushrooms and fresh herbs.",
+      "image": "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "id": 3,
+      "name": "Sunrise Salmon Plate",
+      "tag": "Fresh catch",
+      "price": 1820,
+      "description": "Seared salmon, quinoa, avocado, and a bright lemon-yogurt finish.",
+      "image": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "id": 4,
+      "name": "Garden Wrap",
+      "tag": "Veggie lover",
+      "price": 1240,
+      "description": "Crisp greens, hummus, carrots, roasted peppers, and feta in a wrap.",
+      "image": "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "id": 5,
+      "name": "Spicy Beef Tacos",
+      "tag": "Best seller",
+      "price": 1380,
+      "description": "Three soft tacos filled with spiced beef, slaw, and chipotle crema.",
+      "image": "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "id": 6,
+      "name": "Safari Lager",
+      "tag": "Alcohol",
+      "price": 750,
+      "description": "A crisp local lager with a light finish, perfect for a relaxed evening.",
+      "image": "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "id": 7,
+      "name": "Kenya Sunset Cocktail",
+      "tag": "Signature sip",
+      "price": 1200,
+      "description": "Mango, passion fruit, and citrus blended into a bright tropical cocktail.",
+      "image": "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=900&q=80"
+    },
+    {
+      "id": 8,
+      "name": "Berry Cheesecake",
+      "tag": "Sweet finish",
+      "price": 890,
+      "description": "Creamy cheesecake layered with berry compote and crunchy almond crumble.",
+      "image": "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=900&q=80"
+    }
+  ]
+}
