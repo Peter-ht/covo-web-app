@@ -1,4 +1,11 @@
-import { fetchMenuItems, createMenuItem, updateMenuItem, patchMenuItem, deleteMenuItem } from './modules/api.js';
+import {
+  FALLBACK_MENU_ITEMS,
+  fetchMenuItems,
+  createMenuItem,
+  updateMenuItem,
+  patchMenuItem,
+  deleteMenuItem
+} from './modules/api.js';
 import {
   addToCart,
   removeFromCart,
@@ -357,7 +364,7 @@ async function loadMenu() {
     updateCartUI();
   } catch (error) {
     showUserMessage(error.message || 'Unable to load menu.', 'error');
-    renderMenu([]);
+    renderMenu(FALLBACK_MENU_ITEMS);
     renderAdminMenu([]);
     updateCartUI();
   }
