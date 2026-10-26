@@ -502,6 +502,7 @@ function initializeApp() {
   setAdminAccess(isLoggedIn);
   renderAdminOrders();
   updateTrackingStatus();
+  renderMenu(FALLBACK_MENU_ITEMS);
   loadMenu();
 }
 
