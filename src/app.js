@@ -19,12 +19,6 @@ let cartIndicator = null;
 let cartItemsList = null;
 let cartTotal = null;
 let checkoutButton = null;
-let mpesaModal = null;
-let mpesaForm = null;
-let mpesaPhoneInput = null;
-let mpesaTotal = null;
-let closeMpesaModalButton = null;
-let cancelMpesaModalButton = null;
 let adminLoginForm = null;
 let adminUsernameInput = null;
 let adminPasswordInput = null;
@@ -48,12 +42,6 @@ function cacheDomElements() {
   cartItemsList = document.getElementById('cart-items');
   cartTotal = document.getElementById('cart-total');
   checkoutButton = document.querySelector('.checkout-btn');
-  mpesaModal = document.getElementById('mpesa-modal');
-  mpesaForm = document.getElementById('mpesa-form');
-  mpesaPhoneInput = document.getElementById('mpesa-phone');
-  mpesaTotal = document.getElementById('mpesa-total');
-  closeMpesaModalButton = document.getElementById('close-mpesa-modal');
-  cancelMpesaModalButton = document.getElementById('cancel-mpesa-modal');
   adminLoginForm = document.getElementById('admin-login-form');
   adminUsernameInput = document.getElementById('admin-username');
   adminPasswordInput = document.getElementById('admin-password');
@@ -156,30 +144,6 @@ function setAdminAccess(isLoggedIn) {
 
   if (adminUsernameInput) adminUsernameInput.value = '';
   if (adminPasswordInput) adminPasswordInput.value = '';
-}
-
-function openMpesaModal() {
-  if (!mpesaModal) return;
-  if (mpesaTotal) {
-    mpesaTotal.textContent = formatCurrency(getCartTotal(cart));
-  }
-  mpesaModal.classList.remove('hidden');
-  mpesaModal.setAttribute('aria-hidden', 'false');
-  if (mpesaPhoneInput) {
-    mpesaPhoneInput.focus();
-  }
-}
-
-function closeMpesaModal() {
-  if (!mpesaModal) return;
-  mpesaModal.classList.add('hidden');
-  mpesaModal.setAttribute('aria-hidden', 'true');
-  if (mpesaForm) {
-    mpesaForm.reset();
-  }
-  if (mpesaPhoneInput) {
-    mpesaPhoneInput.blur();
-  }
 }
 
 function renderMenu(items) {
@@ -285,7 +249,7 @@ function renderAdminOrders(orders = getStoredOrders()) {
           <strong>Order #${order.id}</strong>
           <span class="order-total">${formatCurrency(order.total || 0)}</span>
         </div>
-        <p class="order-phone">Customer: ${order.phone || 'Unknown'}</p>
+        <p class="order-phone">Customer: ${order.phone || 'Guest'}</p>
         <p class="order-items">${itemSummary}</p>
       </div>
       <div class="order-status-panel">
@@ -405,32 +369,6 @@ async function handleCheckout() {
     return;
   }
 
-  openMpesaModal();
-}
-
-async function saveOrder(order) {
-  const storedOrders = getStoredOrders();
-  const nextOrders = [order, ...storedOrders];
-  saveStoredOrders(nextOrders);
-  return order;
-}
-
-function handleMpesaPayment(event) {
-  event.preventDefault();
-
-  if (!cart.length) {
-    showUserMessage('Your cart is empty.', 'error');
-    return;
-  }
-
-  const phoneValue = mpesaPhoneInput ? mpesaPhoneInput.value.trim() : '';
-  const normalizedPhone = phoneValue.replace(/\s+/g, '');
-
-  if (!/^((\+254)|254|0)\d{9}$/.test(normalizedPhone)) {
-    showUserMessage('Please enter a valid M-Pesa phone number.', 'error');
-    return;
-  }
-
   try {
     const order = {
       id: Date.now(),
@@ -440,22 +378,25 @@ function handleMpesaPayment(event) {
         price: item.price
       })),
       total: getCartTotal(cart),
-      phone: normalizedPhone,
-      paymentMethod: 'M-Pesa',
       status: 'Pending',
       createdAt: new Date().toISOString()
     };
 
-    saveOrder(order);
+    await saveOrder(order);
     renderAdminOrders();
-
     cart.length = 0;
     updateCartUI();
-    closeMpesaModal();
-    showUserMessage(`M-Pesa prompt sent to ${normalizedPhone}.`, 'success');
+    showUserMessage('Order placed successfully.', 'success');
   } catch (error) {
-    showUserMessage(error.message || 'M-Pesa checkout failed.', 'error');
+    showUserMessage(error.message || 'Unable to place order.', 'error');
   }
+}
+
+async function saveOrder(order) {
+  const storedOrders = getStoredOrders();
+  const nextOrders = [order, ...storedOrders];
+  saveStoredOrders(nextOrders);
+  return order;
 }
 
 async function handleMenuSubmit(event) {
@@ -537,26 +478,6 @@ function bindEventListeners() {
     checkoutButton.addEventListener('click', handleCheckout);
   }
 
-  if (mpesaForm) {
-    mpesaForm.addEventListener('submit', handleMpesaPayment);
-  }
-
-  if (closeMpesaModalButton) {
-    closeMpesaModalButton.addEventListener('click', closeMpesaModal);
-  }
-
-  if (cancelMpesaModalButton) {
-    cancelMpesaModalButton.addEventListener('click', closeMpesaModal);
-  }
-
-  if (mpesaModal) {
-    mpesaModal.addEventListener('click', (event) => {
-      if (event.target === mpesaModal) {
-        closeMpesaModal();
-      }
-    });
-  }
-
   if (menuForm) {
     menuForm.addEventListener('submit', handleMenuSubmit);
   }
@@ -568,7 +489,6 @@ function bindEventListeners() {
 
 function initializeApp() {
   cacheDomElements();
-  closeMpesaModal();
   bindEventListeners();
 
   const isLoggedIn = sessionStorage.getItem('covoAdminLoggedIn') === 'true';

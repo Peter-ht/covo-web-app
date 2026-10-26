@@ -1,5 +1,3 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:3001';
-
 export const FALLBACK_MENU_ITEMS = [
   {
     id: 1,
@@ -67,33 +65,20 @@ export const FALLBACK_MENU_ITEMS = [
   }
 ];
 
-export const API_BASE_URL =
-  (typeof window !== 'undefined' && window.COVO_CONFIG && window.COVO_CONFIG.API_BASE_URL) ||
-  (typeof process !== 'undefined' && process.env && process.env.COVO_API_BASE_URL) ||
-  DEFAULT_API_BASE_URL;
+let menuItems = FALLBACK_MENU_ITEMS.map((item) => ({ ...item }));
 
-function getErrorMessage(response, fallbackText) {
-  const errorText = fallbackText || response.statusText || 'Request failed';
-  return `Request failed (${response.status}): ${errorText}`;
-}
-
-export async function apiRequest(endpoint, { method = 'GET', body, headers = {} } = {}) {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      ...headers
-    },
-    body: body === undefined ? undefined : JSON.stringify(body)
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(getErrorMessage(response, text || 'Unknown error'));
+function parsePrice(value) {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : NaN;
   }
 
-  const text = await response.text();
-  return text ? JSON.parse(text) : null;
+  const text = String(value ?? '').trim();
+  if (!text) {
+    return NaN;
+  }
+
+  const normalized = text.replace(/[^\d.]/g, '');
+  return Number(normalized);
 }
 
 export function validateMenuItem(item) {
@@ -109,7 +94,7 @@ export function validateMenuItem(item) {
     image: String(item.image || '').trim()
   };
 
-  const numericPrice = Number(String(item.price || '').replace(/[^\d.]/g, ''));
+  const numericPrice = parsePrice(item.price);
 
   if (!sanitizedItem.name) {
     throw new Error('Item name is required.');
@@ -136,63 +121,76 @@ export function sanitizeMenuItems(items) {
     return [];
   }
 
-  return items.filter((item) => {
-    if (!item || typeof item !== 'object') {
-      return false;
-    }
+  return items
+    .filter((item) => {
+      if (!item || typeof item !== 'object') {
+        return false;
+      }
 
-    const name = String(item.name || '').trim();
-    const tag = String(item.tag || '').trim();
-    const description = String(item.description || '').trim();
+      const name = String(item.name || '').trim();
+      const tag = String(item.tag || '').trim();
+      const description = String(item.description || '').trim();
+      const price = parsePrice(item.price);
 
-    if (name.startsWith('Order-')) {
-      return false;
-    }
+      if (name.toLowerCase().startsWith('order-')) {
+        return false;
+      }
 
-    if (tag === 'M-Pesa') {
-      return false;
-    }
+      if (tag === 'M-Pesa') {
+        return false;
+      }
 
-    if (description.startsWith('{') && description.includes('"items"')) {
-      return false;
-    }
+      if (description.startsWith('{') && description.includes('"items"')) {
+        return false;
+      }
 
-    return Boolean(name && tag && description && Number(item.price) > 0);
-  });
+      return Boolean(name && tag && description && Number.isFinite(price) && price > 0);
+    })
+    .map((item) => ({
+      ...item,
+      price: parsePrice(item.price)
+    }));
 }
 
 export async function fetchMenuItems() {
-  try {
-    const items = await apiRequest('/menu');
-    return sanitizeMenuItems(items);
-  } catch (error) {
-    return sanitizeMenuItems(FALLBACK_MENU_ITEMS);
-  }
+  return sanitizeMenuItems(menuItems).map((item) => ({ ...item }));
 }
 
 export async function createMenuItem(item) {
-  return apiRequest('/menu', {
-    method: 'POST',
-    body: validateMenuItem(item)
-  });
+  const newItem = {
+    ...validateMenuItem(item),
+    id: Math.max(0, ...menuItems.map((entry) => Number(entry.id) || 0)) + 1
+  };
+  menuItems = [...menuItems, newItem];
+  return { ...newItem };
 }
 
 export async function updateMenuItem(id, item) {
-  return apiRequest(`/menu/${id}`, {
-    method: 'PUT',
-    body: validateMenuItem(item)
-  });
+  const index = menuItems.findIndex((entry) => String(entry.id) === String(id));
+  if (index < 0) {
+    throw new Error(`Menu item ${id} was not found.`);
+  }
+
+  const updatedItem = { ...validateMenuItem(item), id: menuItems[index].id };
+  menuItems = menuItems.map((entry, entryIndex) => entryIndex === index ? updatedItem : entry);
+  return { ...updatedItem };
 }
 
 export async function patchMenuItem(id, updates) {
-  return apiRequest(`/menu/${id}`, {
-    method: 'PATCH',
-    body: updates
-  });
+  const currentItem = menuItems.find((entry) => String(entry.id) === String(id));
+  if (!currentItem) {
+    throw new Error(`Menu item ${id} was not found.`);
+  }
+
+  return updateMenuItem(id, { ...currentItem, ...updates });
 }
 
 export async function deleteMenuItem(id) {
-  return apiRequest(`/menu/${id}`, {
-    method: 'DELETE'
-  });
+  const item = menuItems.find((entry) => String(entry.id) === String(id));
+  if (!item) {
+    throw new Error(`Menu item ${id} was not found.`);
+  }
+
+  menuItems = menuItems.filter((entry) => String(entry.id) !== String(id));
+  return { ...item };
 }

@@ -1,11 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-import { validateMenuItem, API_BASE_URL, sanitizeMenuItems, fetchMenuItems } from '../src/modules/api.js';
-
-test('API_BASE_URL defaults to local JSON server', () => {
-  assert.equal(API_BASE_URL, 'http://localhost:3001');
-});
+import {
+  validateMenuItem,
+  sanitizeMenuItems,
+  fetchMenuItems,
+  createMenuItem,
+  updateMenuItem,
+  patchMenuItem,
+  deleteMenuItem
+} from '../src/modules/api.js';
 
 test('validateMenuItem accepts valid menu data', () => {
   const item = validateMenuItem({
@@ -31,7 +35,7 @@ test('sanitizeMenuItems removes order records from the menu feed', () => {
       name: 'Truffle Mushroom Pasta',
       tag: 'Chef special',
       description: 'Creamy parmesan pasta.',
-      price: 1650,
+      price: 'KSh 1,650',
       image: 'https://example.com/pasta.jpg'
     },
     {
@@ -48,20 +52,34 @@ test('sanitizeMenuItems removes order records from the menu feed', () => {
 
   assert.equal(cleaned.length, 1);
   assert.equal(cleaned[0].name, 'Truffle Mushroom Pasta');
+  assert.equal(cleaned[0].price, 1650);
 });
 
-test('fetchMenuItems falls back to the bundled menu when the API is unavailable', async () => {
-  const originalFetch = global.fetch;
-  global.fetch = async () => {
-    throw new Error('Failed to connect');
-  };
+test('mock API supports menu create, update, patch, and delete operations', async () => {
+  const initialItems = await fetchMenuItems();
+  assert.ok(initialItems.length > 0);
+  assert.equal(initialItems[0].name, 'Crispy Chicken Bowl');
 
-  try {
-    const items = await fetchMenuItems();
-    assert.ok(Array.isArray(items));
-    assert.ok(items.length > 0);
-    assert.equal(items[0].name, 'Crispy Chicken Bowl');
-  } finally {
-    global.fetch = originalFetch;
-  }
+  const created = await createMenuItem({
+    name: 'Test item',
+    tag: 'Test',
+    description: 'Temporary test menu item.',
+    price: 500,
+    image: 'test.jpg'
+  });
+  assert.ok(created.id);
+
+  const updated = await updateMenuItem(created.id, {
+    ...created,
+    name: 'Updated test item'
+  });
+  assert.equal(updated.name, 'Updated test item');
+
+  const patched = await patchMenuItem(created.id, { tag: 'Featured' });
+  assert.equal(patched.tag, 'Featured');
+  assert.equal(patched.name, 'Updated test item');
+
+  const deleted = await deleteMenuItem(created.id);
+  assert.equal(deleted.id, created.id);
+  assert.equal((await fetchMenuItems()).length, initialItems.length);
 });
