@@ -50,3 +50,8 @@ If the menu API is unavailable, the site displays its bundled sample menu and sh
 
 - Username: admin
 - Password: admin123
+
+## Deployment
+- I deployed through github page the url is below
+
+
