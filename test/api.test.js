@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  API_BASE_URL,
   validateMenuItem,
   sanitizeMenuItems,
   fetchMenuItems,
@@ -10,6 +11,20 @@ import {
   patchMenuItem,
   deleteMenuItem
 } from '../src/modules/api.js';
+
+function createResponse(status, body = '') {
+  const text = typeof body === 'string' ? body : JSON.stringify(body);
+  return {
+    ok: status >= 200 && status < 300,
+    status,
+    statusText: status === 404 ? 'Not Found' : 'OK',
+    text: async () => text
+  };
+}
+
+test('API_BASE_URL defaults to the local JSON Server', () => {
+  assert.equal(API_BASE_URL, 'http://localhost:3001');
+});
 
 test('validateMenuItem accepts valid menu data', () => {
   const item = validateMenuItem({
@@ -55,31 +70,69 @@ test('sanitizeMenuItems removes order records from the menu feed', () => {
   assert.equal(cleaned[0].price, 1650);
 });
 
-test('mock API supports menu create, update, patch, and delete operations', async () => {
-  const initialItems = await fetchMenuItems();
-  assert.ok(initialItems.length > 0);
-  assert.equal(initialItems[0].name, 'Crispy Chicken Bowl');
+test('menu API uses JSON REST endpoints for CRUD operations', async () => {
+  const originalFetch = global.fetch;
+  const items = [{ id: 1, name: 'Rice Bowl', tag: 'Healthy', description: 'Fresh and tasty', price: 800, image: 'img.jpg' }];
+  const requests = [];
+  global.fetch = async (url, options) => {
+    requests.push({ url, ...options });
+    const path = new URL(url).pathname;
+    const body = options.body ? JSON.parse(options.body) : undefined;
 
-  const created = await createMenuItem({
-    name: 'Test item',
-    tag: 'Test',
-    description: 'Temporary test menu item.',
-    price: 500,
-    image: 'test.jpg'
-  });
-  assert.ok(created.id);
+    if (path === '/menu' && options.method === 'GET') {
+      return createResponse(200, items);
+    }
+    if (path === '/menu' && options.method === 'POST') {
+      const created = { ...body, id: 2 };
+      items.push(created);
+      return createResponse(201, created);
+    }
+    if (path === '/menu/2' && options.method === 'PUT') {
+      items[1] = { ...body, id: 2 };
+      return createResponse(200, items[1]);
+    }
+    if (path === '/menu/2' && options.method === 'PATCH') {
+      items[1] = { ...items[1], ...body };
+      return createResponse(200, items[1]);
+    }
+    if (path === '/menu/2' && options.method === 'DELETE') {
+      items.splice(1, 1);
+      return createResponse(204);
+    }
+    return createResponse(404, 'Not found');
+  };
 
-  const updated = await updateMenuItem(created.id, {
-    ...created,
-    name: 'Updated test item'
-  });
-  assert.equal(updated.name, 'Updated test item');
+  try {
+    const fetchedItems = await fetchMenuItems();
+    assert.equal(fetchedItems[0].name, 'Rice Bowl');
 
-  const patched = await patchMenuItem(created.id, { tag: 'Featured' });
-  assert.equal(patched.tag, 'Featured');
-  assert.equal(patched.name, 'Updated test item');
+    const created = await createMenuItem({
+      name: 'Test item',
+      tag: 'Test',
+      description: 'Temporary test menu item.',
+      price: 500,
+      image: 'test.jpg'
+    });
+    assert.equal(created.id, 2);
 
-  const deleted = await deleteMenuItem(created.id);
-  assert.equal(deleted.id, created.id);
-  assert.equal((await fetchMenuItems()).length, initialItems.length);
+    const updated = await updateMenuItem(created.id, { ...created, name: 'Updated test item' });
+    assert.equal(updated.name, 'Updated test item');
+
+    const patched = await patchMenuItem(created.id, { tag: 'Featured' });
+    assert.equal(patched.tag, 'Featured');
+
+    assert.equal(await deleteMenuItem(created.id), null);
+    assert.deepEqual(
+      requests.map(({ url, method }) => [url, method]),
+      [
+        [`${API_BASE_URL}/menu`, 'GET'],
+        [`${API_BASE_URL}/menu`, 'POST'],
+        [`${API_BASE_URL}/menu/2`, 'PUT'],
+        [`${API_BASE_URL}/menu/2`, 'PATCH'],
+        [`${API_BASE_URL}/menu/2`, 'DELETE']
+      ]
+    );
+  } finally {
+    global.fetch = originalFetch;
+  }
 });

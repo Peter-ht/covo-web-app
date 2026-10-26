@@ -1,3 +1,5 @@
+const DEFAULT_API_BASE_URL = 'http://localhost:3001';
+
 export const FALLBACK_MENU_ITEMS = [
   {
     id: 1,
@@ -65,7 +67,33 @@ export const FALLBACK_MENU_ITEMS = [
   }
 ];
 
-let menuItems = FALLBACK_MENU_ITEMS.map((item) => ({ ...item }));
+export const API_BASE_URL =
+  (typeof window !== 'undefined' && window.COVO_CONFIG && window.COVO_CONFIG.API_BASE_URL) ||
+  (typeof process !== 'undefined' && process.env && process.env.COVO_API_BASE_URL) ||
+  DEFAULT_API_BASE_URL;
+
+export async function apiRequest(endpoint, { method = 'GET', body, headers = {} } = {}) {
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers
+    },
+    body: body === undefined ? undefined : JSON.stringify(body)
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Request failed (${response.status}): ${errorText || response.statusText || 'Unknown error'}`);
+  }
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
+}
 
 function parsePrice(value) {
   if (typeof value === 'number') {
@@ -153,44 +181,33 @@ export function sanitizeMenuItems(items) {
 }
 
 export async function fetchMenuItems() {
-  return sanitizeMenuItems(menuItems).map((item) => ({ ...item }));
+  const items = await apiRequest('/menu');
+  return sanitizeMenuItems(items);
 }
 
 export async function createMenuItem(item) {
-  const newItem = {
-    ...validateMenuItem(item),
-    id: Math.max(0, ...menuItems.map((entry) => Number(entry.id) || 0)) + 1
-  };
-  menuItems = [...menuItems, newItem];
-  return { ...newItem };
+  return apiRequest('/menu', {
+    method: 'POST',
+    body: validateMenuItem(item)
+  });
 }
 
 export async function updateMenuItem(id, item) {
-  const index = menuItems.findIndex((entry) => String(entry.id) === String(id));
-  if (index < 0) {
-    throw new Error(`Menu item ${id} was not found.`);
-  }
-
-  const updatedItem = { ...validateMenuItem(item), id: menuItems[index].id };
-  menuItems = menuItems.map((entry, entryIndex) => entryIndex === index ? updatedItem : entry);
-  return { ...updatedItem };
+  return apiRequest(`/menu/${id}`, {
+    method: 'PUT',
+    body: validateMenuItem(item)
+  });
 }
 
 export async function patchMenuItem(id, updates) {
-  const currentItem = menuItems.find((entry) => String(entry.id) === String(id));
-  if (!currentItem) {
-    throw new Error(`Menu item ${id} was not found.`);
-  }
-
-  return updateMenuItem(id, { ...currentItem, ...updates });
+  return apiRequest(`/menu/${id}`, {
+    method: 'PATCH',
+    body: updates
+  });
 }
 
 export async function deleteMenuItem(id) {
-  const item = menuItems.find((entry) => String(entry.id) === String(id));
-  if (!item) {
-    throw new Error(`Menu item ${id} was not found.`);
-  }
-
-  menuItems = menuItems.filter((entry) => String(entry.id) !== String(id));
-  return { ...item };
+  return apiRequest(`/menu/${id}`, {
+    method: 'DELETE'
+  });
 }

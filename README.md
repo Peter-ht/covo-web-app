@@ -33,13 +33,19 @@ A restaurant ordering website for a fictional food brand, built with HTML, CSS, 
 
 1. Clone the project
 2. Install dependencies:
+   ```bash
    npm install
-3. Start the backend:
+   ```
+3. Start the mock REST API (JSON Server) on `http://localhost:3001`:
+   ```bash
    npm start
+   ```
+4. Serve `index.html` with a local static server such as VS Code Live Server. The app uses `http://localhost:3001` by default; set `window.COVO_CONFIG.API_BASE_URL` before loading the app to point to another API URL.
+
+The mock API serves the menu stored in `db.json`. JSON Server exposes standard REST endpoints such as `GET /menu`, `POST /menu`, `PUT /menu/:id`, `PATCH /menu/:id`, and `DELETE /menu/:id`. Data changes are written to `db.json`.
 
 ## Admin Login
 
 - Username: admin
 - Password: admin123
-
 
