@@ -44,8 +44,9 @@ A restaurant ordering website for a fictional food brand, built with HTML, CSS, 
 
 The mock API serves the menu stored in `db.json`. JSON Server exposes standard REST endpoints such as `GET /menu`, `POST /menu`, `PUT /menu/:id`, `PATCH /menu/:id`, and `DELETE /menu/:id`. Data changes are written to `db.json`.
 
+If the menu API is unavailable, the site displays its bundled sample menu and shows an error message. The sample items are for display only; menu management requires the API to be running.
+
 ## Admin Login
 
 - Username: admin
 - Password: admin123
-
