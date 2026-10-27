@@ -50,3 +50,12 @@ If the menu API is unavailable, the site displays its bundled sample menu and sh
 
 - Username: admin
 - Password: admin123
+
+## Deployment
+- I deployed through github page the url is below
+https://peter-ht.github.io/covo-web-app/
+
+- My figma link 
+`https://www.figma.com/design/7I9reET0T04ElFdxGOrs80/Untitled?node-id=22-11&t=Arj2xa8oM3y0HTzG-1`
+
+
