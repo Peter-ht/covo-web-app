@@ -1,13 +1,3 @@
-:root {
-  --bg-rose-1: #fff7f7;
-  --bg-rose-2: #fbe7e7;
-  --bg-rose-3: #f7d4d4;
-  --brand-red: #c62828;
-  --brand-red-dark: #7a1d1d;
-  --brand-red-light: #ff7b7b;
-  --white: #ffffff;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -20,7 +10,7 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   line-height: 1.5;
-  background: linear-gradient(135deg, var(--bg-rose-1) 0%, var(--bg-rose-2) 45%, var(--bg-rose-3) 100%);
+  background: linear-gradient(135deg, #fff7f7 0%, #fbe7e7 45%, #f7d4d4 100%);
 }
 
 a {
@@ -133,7 +123,7 @@ a {
   padding: 8px 14px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.7);
-  color: var(--brand-red-dark);
+  color: #7a1d1d;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.14em;
@@ -142,7 +132,7 @@ a {
 
 .hero h1 {
   margin: 0 0 18px;
-  color: var(--brand-red-dark);
+  color: #7a1d1d;
   font-size: clamp(2.5rem, 5vw, 4.5rem);
   line-height: 1.05;
   letter-spacing: -0.04em;
@@ -176,14 +166,14 @@ a {
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-light) 100%);
-  color: var(--white);
+  background: linear-gradient(135deg, #c62828 0%, #ff7b7b 100%);
+  color: #ffffff;
   box-shadow: 0 10px 22px rgba(198, 40, 40, 0.22);
 }
 
 .secondary-btn {
   background: rgba(255, 255, 255, 0.78);
-  color: var(--brand-red-dark);
+  color: #7a1d1d;
   border: 1px solid rgba(122, 29, 29, 0.12);
 }
 
@@ -200,7 +190,7 @@ a {
   list-style: none;
   padding: 0;
   margin: 28px 0 0;
-  color: var(--brand-red-dark);
+  color: #7a1d1d;
   font-weight: 700;
 }
 
@@ -217,7 +207,7 @@ a {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand-red) 0%, var(--brand-red-light) 100%);
+  background: linear-gradient(135deg, #c62828 0%, #ff7b7b 100%);
   box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.12);
 }
 

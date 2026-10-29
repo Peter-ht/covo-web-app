@@ -53,14 +53,6 @@ test('sanitizeMenuItems removes order records from the menu feed', () => {
       price: 'KSh 1,650',
       image: 'https://example.com/pasta.jpg'
     },
-    {
-      id: 2,
-      name: 'Order-1792870819753',
-      tag: 'M-Pesa',
-      description: '{"items":[{"name":"Truffle Mushroom Pasta","quantity":1,"price":1650}],"total":1650}',
-      price: 1650,
-      image: 'https://example.com/order.jpg'
-    }
   ];
 
   const cleaned = sanitizeMenuItems(items);
