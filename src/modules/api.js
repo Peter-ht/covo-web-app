@@ -7,7 +7,7 @@ export const FALLBACK_MENU_ITEMS = [
     tag: 'High protein',
     price: 1490,
     description: 'Tender grilled chicken, brown rice, roasted greens, and citrus drizzle.',
-    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=80'
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtdwvUUOgJkJJXyOOZI9nqNuNMdOlPTVRpyJPvivcZ8Q&s=10'
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const FALLBACK_MENU_ITEMS = [
     tag: 'Chef special',
     price: 1650,
     description: 'Creamy parmesan pasta with roasted mushrooms and fresh herbs.',
-    image: 'https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=900&q=80'
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStKzMvR2UPc8wSKfRzeBueJpt6acRc_GKc_1PwBjf5QA&s=10'
   },
   {
     id: 3,
@@ -23,7 +23,7 @@ export const FALLBACK_MENU_ITEMS = [
     tag: 'Fresh catch',
     price: 1820,
     description: 'Seared salmon, quinoa, avocado, and a bright lemon-yogurt finish.',
-    image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=900&q=80'
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnNChAgj0xaIv6N24AM53xJIZS5sEtNKYxKAno05XPcQ&s=10',
   },
   {
     id: 4,
@@ -31,7 +31,7 @@ export const FALLBACK_MENU_ITEMS = [
     tag: 'Veggie lover',
     price: 1240,
     description: 'Crisp greens, hummus, carrots, roasted peppers, and feta in a wrap.',
-    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80'
+    image: 'https://frescadostortillas.com/wp-content/uploads/2024/01/Chicken-Wrap-Garden-Vegetable.jpg'
   },
   {
     id: 5,
@@ -39,7 +39,7 @@ export const FALLBACK_MENU_ITEMS = [
     tag: 'Best seller',
     price: 1380,
     description: 'Three soft tacos filled with spiced beef, slaw, and chipotle crema.',
-    image: 'https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?auto=format&fit=crop&w=900&q=80'
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOwOyelR468ub6BFXCWDLJQyJX-T5PNovacSYV3lGD8Q&s=10'
   },
   {
     id: 6,
@@ -47,7 +47,7 @@ export const FALLBACK_MENU_ITEMS = [
     tag: 'Alcohol',
     price: 750,
     description: 'A crisp local lager with a light finish, perfect for a relaxed evening.',
-    image: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=900&q=80'
+    image:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0G8b2mUVoaINoH0ej8sO0jUmJ7Ey2jtndN5cDBUehMA&s=10'
   },
   {
     id: 7,
@@ -55,7 +55,7 @@ export const FALLBACK_MENU_ITEMS = [
     tag: 'Signature sip',
     price: 1200,
     description: 'Mango, passion fruit, and citrus blended into a bright tropical cocktail.',
-    image: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=900&q=80'
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-GVsmYDLxgK36ex87hx55oqqQK3TmwKmngRNsSeOUSw&s=10'
   },
   {
     id: 8,
@@ -63,7 +63,7 @@ export const FALLBACK_MENU_ITEMS = [
     tag: 'Sweet finish',
     price: 890,
     description: 'Creamy cheesecake layered with berry compote and crunchy almond crumble.',
-    image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=900&q=80'
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2-dLKYSxct_BVGju7vAf8-pmtOXek5USbuRxtrJewwoAMPuMiLuxea8w&s=10'
   }
 ];
 
